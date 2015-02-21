@@ -53,3 +53,7 @@ class KmpMachine:
                 index = index + match - self.__failList[match]
                 match = max(self.__failList[match], 0)  # if match == 0 is should be 0, not -1
         return None
+
+
+def Search(pattern, text):
+    return KmpMachine(pattern).Search(text)
