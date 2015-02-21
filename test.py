@@ -9,6 +9,7 @@ def randomSubstring(s):
     end = random.randint(start + 1,len(s))
     return s[start:end]
 
+message = 'No message'
 
 def test():
     try:
@@ -28,8 +29,13 @@ def test():
 
     for i in range(1000):
         s = randomWord()
-        m = kmp.KmpMachine(randomSubstring(s))
+        sub = randomSubstring(s)
+        m = kmp.KmpMachine(sub)
+        message = 'Pattern: ' + sub + '\nText: ' + s
+        print(message)
         assert m.Search(s) != None
 
-
-test()
+try:
+    test()
+except AssertionError:
+    print(message)
