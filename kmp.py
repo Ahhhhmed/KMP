@@ -11,7 +11,7 @@ class KmpMachine:
         self.__isCompiled = False
         self.__failList = []
 
-    def Compile(self):
+    def __compile(self):
         if self.__isCompiled:
             return None
         assert (self.__failList == [])
@@ -44,7 +44,7 @@ class KmpMachine:
 
     def Search(self, text):
         if not self.__isCompiled:
-            self.Compile()
+            self.__compile()
 
         index = 0
         match = 0
