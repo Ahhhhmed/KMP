@@ -28,7 +28,7 @@ class KmpMachine:
                     self.__failList.append(0)
                     break
 
-                if self.__pattern[self.__failList[j]] == self.__pattern[i]:
+                if self.__pattern[self.__failList[j]] == self.__pattern[i-1]:
                     self.__failList.append(self.__failList[j] + 1)
                     break
 
