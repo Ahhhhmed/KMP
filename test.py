@@ -1,6 +1,7 @@
 __author__ = 'Nenad Vasic'
 import kmp
 import random
+import time
 
 def randomWord():
     return ''.join(random.choice("abcd") for _ in range(random.randint(4,100)))
@@ -27,15 +28,20 @@ def test():
     k = kmp.KmpMachine('aab')
     assert k.Search('caaabbbac') != None
 
-    for i in range(1000):
+    for i in range(10000):
         s = randomWord()
         sub = randomSubstring(s)
         m = kmp.KmpMachine(sub)
         message = 'Pattern: ' + sub + '\nText: ' + s
-        print(message)
         assert m.Search(s) != None
+
+start = time.time()
 
 try:
     test()
 except AssertionError:
     print(message)
+
+end = time.time()
+runtime = end-start
+print('Runtime: ' + runtime.__repr__() + ' sec')
