@@ -46,19 +46,25 @@ class KmpMachine:
         if not self.__isCompiled:
             self.__compile()
 
+        #current index in text
         index = 0
-        match = 0
+        #current state of the machine
+        state = 0
 
-        while index + match < len(text):
+        while index < len(text):
+            #read 1 character to get to state 0
+            if state == -1:
+                state = 0
+                index += 1
             #Extending partial match
-            if text[index + match] == self.__pattern[match]:
-                match += 1
-                if match == len(self.__pattern):
+            elif text[index] == self.__pattern[state]:
+                state += 1
+                index += 1
+                if state == len(self.__pattern):
                     return index
             #Falling back according to the __failList
             else:
-                index = index + match - self.__failList[match]
-                match = max(self.__failList[match], 0)  # if match == 0 is should be 0, not -1
+                state = self.__failList[state]  # if match == 0 is should be 0, not -1
         return None
 
 
