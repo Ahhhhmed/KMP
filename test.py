@@ -26,7 +26,7 @@ def test():
         pass
 
     k = kmp.KmpMachine('aabd')
-    r = k.Search('caaabbbac') == None
+    r = k.Search('caaabbbac')
     assert r == None
 
     r = kmp.Search('aabbbssaaabsseqw','aabbbssaaabssewrrea')
