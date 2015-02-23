@@ -25,8 +25,12 @@ def test():
     except TypeError:
         pass
 
-    k = kmp.KmpMachine('aab')
-    assert k.Search('caaabbbac') != None
+    k = kmp.KmpMachine('aabd')
+    r = k.Search('caaabbbac') == None
+    assert r == None
+
+    r = kmp.Search('aabbbssaaabsseqw','aabbbssaaabssewrrea')
+    assert r == None
 
     for i in range(10000):
         s = randomWord()
