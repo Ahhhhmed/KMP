@@ -17,10 +17,10 @@ class KmpMachine:
         assert (self.__failList == [])
 
         #first two elements have fixed values
-        self.__failList.append({self.__pattern[0]: 1, 'other': -1})
+        self.__failList.append({self.__pattern[0]: 1, 'lb': -1})
         if (len(self.__pattern) > 1):
             self.__failList.append(dict(self.__failList[0]))
-            self.__failList[-1]['other'] = 0
+            self.__failList[-1]['lb'] = 0
             self.__failList[-1][self.__pattern[1]] = 2
 
         for i in range(2, len(self.__pattern)):
@@ -31,20 +31,20 @@ class KmpMachine:
                 #LB is length 0 (does not exist), returning to the beginning of the pattern
                 if j == 0:
                     self.__failList.append(dict(self.__failList[0]))
-                    self.__failList[-1]['other'] = 0
+                    self.__failList[-1]['lb'] = 0
                     self.__failList[-1][self.__pattern[i]] = i+1
                     break
 
                 #LB for some character can be extended by 1 and that makes LB for the current character
-                if self.__pattern[self.__failList[j]['other']] == self.__pattern[i-1]:
-                    failState = self.__failList[j]['other'] + 1
+                if self.__pattern[self.__failList[j]['lb']] == self.__pattern[i-1]:
+                    failState = self.__failList[j]['lb'] + 1
                     self.__failList.append(dict(self.__failList[failState]))
-                    self.__failList[-1]['other'] = failState
+                    self.__failList[-1]['lb'] = failState
                     self.__failList[-1][self.__pattern[i]] = i+1
                     break
 
                 #LB of LB, next possible LB to be extended
-                j = self.__failList[j]['other']
+                j = self.__failList[j]['lb']
 
         self.__isCompiled = True
         assert len(self.__failList) == len(self.__pattern)
