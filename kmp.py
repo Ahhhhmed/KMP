@@ -17,9 +17,9 @@ class KmpMachine:
         assert (self.__failList == [])
 
         #first two elements have fixed values
-        self.__failList.append(-1)
+        self.__failList.append({self.__pattern[0]: 1, 'other': -1})
         if (len(self.__pattern) > 1):
-            self.__failList.append(0)
+            self.__failList.append({self.__pattern[1]: 2, 'other': 0})
 
         for i in range(2, len(self.__pattern)):
             #Finding Longest Block (LB), starting from the LB of the last current character
@@ -28,16 +28,16 @@ class KmpMachine:
             while True:
                 #LB is length 0 (does not exist), returning to the beginning of the pattern
                 if j == 0:
-                    self.__failList.append(0)
+                    self.__failList.append({self.__pattern[i]: i+1, 'other': 0})
                     break
 
                 #LB for some character can be extended by 1 and that makes LB for the current character
-                if self.__pattern[self.__failList[j]] == self.__pattern[i-1]:
-                    self.__failList.append(self.__failList[j] + 1)
+                if self.__pattern[self.__failList[j]['other']] == self.__pattern[i-1]:
+                    self.__failList.append({self.__pattern[i]: i+1, 'other': self.__failList[j]['other'] + 1})
                     break
 
                 #LB of LB, next possible LB to be extended
-                j = self.__failList[j]
+                j = self.__failList[j]['other']
 
         self.__isCompiled = True
         assert len(self.__failList) == len(self.__pattern)
@@ -57,14 +57,14 @@ class KmpMachine:
                 state = 0
                 index += 1
             #Extending partial match
-            elif text[index] == self.__pattern[state]:
-                state += 1
+            elif text[index] in self.__failList[state]:
+                state = self.__failList[state][text[index]]
                 index += 1
                 if state == len(self.__pattern):
                     return index
             #Falling back according to the __failList
             else:
-                state = self.__failList[state]  # if match == 0 is should be 0, not -1
+                state = self.__failList[state]['other']  # if match == 0 is should be 0, not -1
         return None
 
 
