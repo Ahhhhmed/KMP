@@ -19,7 +19,9 @@ class KmpMachine:
         #first two elements have fixed values
         self.__failList.append({self.__pattern[0]: 1, 'other': -1})
         if (len(self.__pattern) > 1):
-            self.__failList.append({self.__pattern[1]: 2, 'other': 0})
+            self.__failList.append(dict(self.__failList[0]))
+            self.__failList[-1]['other'] = 0
+            self.__failList[-1][self.__pattern[1]] = 2
 
         for i in range(2, len(self.__pattern)):
             #Finding Longest Block (LB), starting from the LB of the last current character
@@ -28,12 +30,17 @@ class KmpMachine:
             while True:
                 #LB is length 0 (does not exist), returning to the beginning of the pattern
                 if j == 0:
-                    self.__failList.append({self.__pattern[i]: i+1, 'other': 0})
+                    self.__failList.append(dict(self.__failList[0]))
+                    self.__failList[-1]['other'] = 0
+                    self.__failList[-1][self.__pattern[i]] = i+1
                     break
 
                 #LB for some character can be extended by 1 and that makes LB for the current character
                 if self.__pattern[self.__failList[j]['other']] == self.__pattern[i-1]:
-                    self.__failList.append({self.__pattern[i]: i+1, 'other': self.__failList[j]['other'] + 1})
+                    failState = self.__failList[j]['other'] + 1
+                    self.__failList.append(dict(self.__failList[failState]))
+                    self.__failList[-1]['other'] = failState
+                    self.__failList[-1][self.__pattern[i]] = i+1
                     break
 
                 #LB of LB, next possible LB to be extended
@@ -64,7 +71,7 @@ class KmpMachine:
                     return index
             #Falling back according to the __failList
             else:
-                state = self.__failList[state]['other']  # if match == 0 is should be 0, not -1
+                state =  -1
         return None
 
 
