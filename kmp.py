@@ -49,6 +49,12 @@ class KmpMachine:
         self.__isCompiled = True
         assert len(self.__failList) == len(self.__pattern)
 
+    def __nextState(self,state,letter):
+        assert self.__isCompiled
+        if letter in self.__failList[state]:
+            return self.__failList[state][letter]
+        return 0
+
     def Search(self, text):
         if not self.__isCompiled:
             self.__compile()
@@ -59,14 +65,10 @@ class KmpMachine:
         state = 0
 
         while index < len(text):
-            #Extending partial match
-            if text[index] in self.__failList[state]:
-                state = self.__failList[state][text[index]]
-                if state == len(self.__pattern):
-                    return index
-            #Falling back according to the __failList
-            else:
-                state = 0
+            #Reading next character
+            state = self.__nextState(state,text[index])
+            if state == len(self.__pattern):
+                return index
             index += 1
         return None
 
