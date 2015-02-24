@@ -56,6 +56,13 @@ class KmpMachine:
         return failState
 
     def Search(self, text):
+        if type(text) is not str:
+            raise TypeError("Type must be string")
+
+        #If text is shorter then pattern, match can not exist
+        if len(text) < len(self.__pattern):
+            return None
+
         if not self.__isCompiled:
             self.__compile()
 
