@@ -2,6 +2,7 @@ __author__ = 'Nenad Vasic'
 
 
 class KmpMachine:
+    """Implementation of KMP algorithm as finite state machine."""
     def __init__(self, pattern):
         if type(pattern) is not str:
             raise TypeError("Type must be string")
@@ -9,14 +10,16 @@ class KmpMachine:
             raise ValueError("Empty string not allowed")
         self.__pattern = pattern
         self.__isCompiled = False
+        #Representing finite state machine with a list of dictionaries
         self.__failList = []
 
     def __compile(self):
+        """Create a non complete finite state machine based on string pattern."""
         if self.__isCompiled:
             return None
         assert (self.__failList == [])
 
-        #first two elements have fixed values
+        #First two elements have fixed values
         self.__failList.append({self.__pattern[0]: 1, 'lb': -1})
 
         for i in range(1, len(self.__pattern)):
@@ -42,6 +45,7 @@ class KmpMachine:
         assert len(self.__failList) == len(self.__pattern)
 
     def __nextState(self,state,letter):
+        """Calculating next state."""
         assert self.__isCompiled
         assert len(letter) == 1
 
@@ -56,6 +60,10 @@ class KmpMachine:
         return failState
 
     def Search(self, text):
+        """
+        Searching text for the pattern string.
+        Returns index of the beginning of the first match if it exists, or None if it does not.
+        """
         if type(text) is not str:
             raise TypeError("Type must be string")
 
@@ -66,9 +74,9 @@ class KmpMachine:
         if not self.__isCompiled:
             self.__compile()
 
-        #current index in text
+        #Current index in text
         index = 0
-        #current state of the machine
+        #Current state of the machine
         state = 0
 
         while index < len(text):
