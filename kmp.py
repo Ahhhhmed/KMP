@@ -68,7 +68,7 @@ class KmpMachine:
             #Reading next character
             state = self.__nextState(state,text[index])
             if state == len(self.__pattern):
-                return index
+                return index - state
             index += 1
         return None
 
