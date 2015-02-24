@@ -51,6 +51,8 @@ class KmpMachine:
 
     def __nextState(self,state,letter):
         assert self.__isCompiled
+        assert len(letter) == 1
+
         if letter in self.__failList[state]:
             return self.__failList[state][letter]
         return 0
