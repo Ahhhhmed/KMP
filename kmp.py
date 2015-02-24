@@ -59,19 +59,15 @@ class KmpMachine:
         state = 0
 
         while index < len(text):
-            #read 1 character to get to state 0
-            if state == -1:
-                state = 0
-                index += 1
             #Extending partial match
-            elif text[index] in self.__failList[state]:
+            if text[index] in self.__failList[state]:
                 state = self.__failList[state][text[index]]
-                index += 1
                 if state == len(self.__pattern):
                     return index
             #Falling back according to the __failList
             else:
-                state =  -1
+                state = 0
+            index += 1
         return None
 
 
