@@ -19,7 +19,9 @@ class KmpMachine:
             return None
         assert (self.__failList == [])
 
-        #First two elements have fixed values
+        #First element have fixed values
+        #lb stands for Longest Block
+        #vc stands for vertex count, number of vertexes that should be connected in the final state machine
         self.__failList.append({self.__pattern[0]: 1, 'lb': -1,'vc':0})
 
         for i in range(1, len(self.__pattern)):
